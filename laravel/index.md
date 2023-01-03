@@ -2,25 +2,68 @@
 
 ## Introducción
 
-Laravel es un framework MVC (Model View Controller). MVC es un patrón de arquitectura de software que permite separar obligaciones de cada parte de tu código. Enfatiza la separación de la lógica de programación con la presentación. El código estará más ordenador y más fácil de mantener. 
+Laravel es un framework que nos proporciona un conjunto de herramientas y recursos que nos facilitan la creación aplicaciones web en PHP. 
 
-**Modelo:** encargado de todas las interacciones con la base de datos (obtener, consultar, actualizar, eliminar...). No muestra la información. De ello se encarga la vista. El modelo no actualiza la información directamente; es el controlador quien decide cuándo llamarlo.
+El objetivo de Laravel es conseguir que la implementación  de aplicaciones sea un proceso sencillo para el desarrollador, sin por ello sacrificar funcionalidades.
 
-**Vista:** se encarga de todo lo que se ve en pantalla. Laravel tiene un template engine llamado *Blade* que muestra los datos. El modelo consulta la BD, pero el controlador decide qué vista hay que llamar y qué datos presentar.
+*Happy developers make the best code"* (https://laravel.com/docs/4.2/introduction)
 
-**Controlador:** comunica modelo y vista. Antes de que el modelo consulte la BD, el controlador es el encargado de llamar a un modelo específico. Una vez consultado el modelo, el controlador recibe la información, llama a la vista y le pasa la información.
+### MVC
+
+MVC (Modelo-Vista-Controlador) es el patrón de arquitectura de software que sigue Laravel. Permite separar las funcionalidades de cada parte del código. Enfatiza la separación de la lógica de programación respecto a la presentación. El código estará más ordenado y será más fácil de mantener. 
+
+* **Modelo:** encargado de todas las interacciones con la base de datos (obtener, consultar, actualizar, eliminar...). No muestra la información. De ello se encarga la vista. El modelo no actualiza la información directamente; es el controlador quien decide cuándo llamarlo.
+
+* **Vista:** se encarga de todo lo que se ve en pantalla. Laravel tiene un template engine llamado *Blade* que muestra los datos. El modelo consulta la BD, pero el controlador decide qué vista hay que llamar y qué datos presentar.
+
+* **Controlador:** comunica modelo y vista. Antes de que el modelo consulte la BD, el controlador es el encargado de llamar a un modelo específico. Una vez consultado el modelo, el controlador recibe la información, llama a la vista y le pasa la información.
 
 Un concepto muy importante en Laravel es el de **Router**. El router (web.php) es el encargado de registrar todas las URL o endpoints que va a soportar nuestra aplicación. Asociado a cada ruta existe un controlador que sabe qué modelo debe llamarse y qué vista mostrar cuando el usuario visita dicha ruta o endpoint.
 
 ![mvc](img/mvc.png)
 
-## Artisan
+## Instalación del entorno de trabajo 
 
-Artisan es el nombre del CLI que incluye Laravel. Permite crear migraciones, controladores, modelos, policies y mucho más.
+### Windows
 
-Se puede invocar mediante el comando `sail artisan...`
+* Instalar Composer (https://getcomposer.org/doc/00-intro.md#using-the-installer)
+  * Comprobar la instalación mediante la ejecución de `composer --version`
 
-## Instalación del entorno de trabajo
+
+* Crear un nuevo proyecto Laravel:
+
+      composer create-project laravel/laravel <nombredelaaplicacion> "9.*" --prefer-dist
+
+* Iniciar el servidor Laravel donde está alojada la aplicación:
+
+        cd <nombredelaaplicacion>
+        php artisan serve
+
+* Acceder a ella a través de http://127.0.0.1:8000
+
+![localhost](img/localhost.png)
+
+### Linux
+
+* Instalar Composer:
+
+        apt-get install composer
+
+  * Comprobar la instalación mediante la ejecución de `composer --version`
+* Crear un nuevo proyecto Laravel:
+
+      composer create-project laravel/laravel <nombredelaaplicacion> "9.*" --prefer-dist
+* Iniciar el servidor Laravel donde está alojada la aplicación:
+
+        cd <nombredelaaplicacion>
+        php artisan serve
+
+* Acceder a ella a través de http://127.0.0.1:8000
+
+![localhost](img/localhost.png)
+
+<!--
+### Docker
 Primero tenemos que descargar y ejecutar el instalador de *docker desktop* desde la web oficial: https://www.docker.com/products/docker-desktop/
 
 Después de instalar y arrancar *docker desktop* vamos a proceder a crear nuestro primer proyecto. Para ello, ejecutamos el siguiente comando desde el directorio padre donde queramos instalar nuestra aplicación:
@@ -47,17 +90,24 @@ De esta forma, desde la carpeta del proyecto podemos ejecutar directamente:
 
 `sail up` o `sail down` 
 
-## ¿Qué es Sail?
+#### ¿Qué es Sail?
 
 *Sail* es una herramienta (CLI) que nos proporciona Laravel para poder interactuar de forma sencilla con Docker (arrancar/parar servicios, llamar a Artisan, instalar dependencias, etc.).
 
-### Comandos útiles de Sail
+##### Comandos útiles de Sail
 * **sail php -v:** conocer la versión de PHP.
 * **sail mysql:** ejecutar el cliente mysql.
 
 Más comandos en https://laravel.com/docs/9.x/sail#executing-sail-commands
+-->
 
-## ¿Qué es Blade?
+## Artisan
+
+*Artisan* es el nombre del CLI que incluye Laravel. Permite crear migraciones, controladores, modelos, policies y mucho más.
+
+Se puede invocar mediante el comando `php artisan...`
+
+## Blade
 
 Es el template engine de Laravel. Las plantillas blade utilizan la extensión ".blade.php" y se almacenan en "resources/views". En los ficheros blade tendremos una mezcla de código HTML, elementos Blade y directivas Blade. 
 
