@@ -10,7 +10,7 @@ El objetivo de Laravel es conseguir que la implementación  de aplicaciones sea 
 
 ### MVC
 
-MVC (Modelo-Vista-Controlador) es el patrón de arquitectura de software que sigue Laravel. Permite separar las funcionalidades de cada parte del código. Enfatiza la separación de la lógica de programación respecto a la presentación. El código estará más ordenado y será más fácil de mantener. 
+MVC (Modelo-Vista-Controlador) es el patrón de arquitectura de software que sigue Laravel. Permite separar las funcionalidades de cada parte del código. Enfatiza la separación de la lógica de programación respecto a la presentación. Esto hará que el código esté más ordenado y sea más fácil de mantener. 
 
 * **Modelo:** encargado de todas las interacciones con la base de datos (obtener, consultar, actualizar, eliminar...). No muestra la información. De ello se encarga la vista. El modelo no actualiza la información directamente; es el controlador quien decide cuándo llamarlo.
 
@@ -107,51 +107,90 @@ Más comandos en https://laravel.com/docs/9.x/sail#executing-sail-commands
 
 Se puede invocar mediante el comando `php artisan...`
 
+## Estructura de carpetas de Laravel
+
+De momento, destacamos los siguientes directorios/ficheros de la estructura de un proyecto Laravel:
+
+* **./app/Http/Controllers**: aquí alojaremos nuestros controladores.
+* **./app/Models**: en esta carpeta estarán nuestros modelos.
+* **./database/migration**: definiremos las migraciones (definiciones del esquema de la base de datos) en esta carpeta
+* **./public**: imágenes, hojas de estilo y código Javascript una vez y son compilados. La parte pública que ve el usuario. También se aloja en esta carpeta el fichero *index.php*, que es el punto de entrada a la aplicación.
+* **./resources/views**: carpeta donde se alojan las vistas.
+* **./routes**: carpeta donde están las rutas. Entre otros ficheros, destacamos *web.php* que es el que define las rutas de la interfaz web.
+* **./storage**: donde se suben los ficheros generados por el usuario.
+* **./vendor**: donde se colocan las dependencias de composer.
+* **./env**: contiene parámetros de configuración que pueden variar en función de dónde se esté ejecutando la aplicación (nombre de la base de datos, usuario y contraseña, etc.).
+
 ## Blade
 
-Es el template engine de Laravel. Las plantillas blade utilizan la extensión ".blade.php" y se almacenan en "resources/views". En los ficheros blade tendremos una mezcla de código HTML, elementos Blade y directivas Blade. 
+Es el motor de plantillas de Laravel. Las plantillas Blade utilizan la extensión ".blade.php" y se almacenan en "resources/views". En los ficheros blade tendremos una mezcla de código HTML junto con elementos y directivas Blade. 
 
-Las *directivas Blade* son una especie de atajos relativas a estructuras de control comunes en PHP, como condicionales o bucles. Por ejemplo:
+Las *directivas Blade* se podrían considerar una especie de atajos relativos a estructuras de control comunes en PHP, como condicionales o bucles. Por ejemplo:
 
-    @if (count($records) > 0)
+    @if ($records > 0)
         I have records!
     @else
         I don't have any records!
     @endif
 
-Mediante el uso de un template engine evitamos sintaxis PHP o etiquetas PHP en nuestros ficheros de vistas. En su lugar deberíamos usar directivas o helpers. La ventaja es que los template engines limitan el número de funcionalidades disponibles en las vistas y de esta forma se aseguran de que no haces cosas locas en las vistas. Es recomendable que si no encontramos una directiva o helper para una funcionalidad que necesitemos implementar en una vista es porque dicha funcinalidad no debería estar implementada en la vista. Quizás debería estarlo en un controlador o en otro fichero.
+en lugar de:
+
+    <?php if($records > 0) { ?>  
+        I have records!  
+    <?php } else { ?>  
+        I don't have any records!  
+    <?php } ?>
+
+Mediante el uso de un motor de plantillas evitamos utilizar sintaxis PHP o etiquetas PHP en nuestros ficheros de vistas. En su lugar deberíamos usar directivas o helpers. La ventaja es que los motores de plantillas limitan el número de funcionalidades disponibles en las vistas y de esta forma se aseguran de que no hacemos *locuras* en las vistas. Es recomendable que si no encontramos una directiva o helper para una funcionalidad que necesitemos implementar en una vista es, posiblemente, porque dicha funcinalidad no debería estar implementada en la vista. Quizás debería estarlo en un controlador o en otro fichero.
+
+## Directiva *extends*
+
+Se utiliza en las vistas para cargar otras vistas. Por ejemplo, para cargar el menú principal que se podría incluir en el encabezado de todas nuestras páginas.
+
+    @extends('layout.app')
+
+Esa línea cargaría el contenido de './views/layout/app.blade.php'. Ojo, que en esta directiva las carpetas se separan de los ficheros utilizando el carácter "." en lugar de "/".
+
+## Directiva *yield*
+
+Sirve para declarar una especie de marcador/contenedor en una vista para posteriormente inyectarle contenido desde las vistas padre utilizando para ello la directiva @section. Requiere dos parámetros. El primero es el identificador del marcador y el segundo (opcional) es un valor por defecto que se inyectará en caso de que la vista no incuya código para dicho marcador.
+
+En la vista hija incluiríamos:
+
+    <h1>@yield('titulo')</h1>
+
+Y en la vista principal incluiríamos:
+
+    @section('titulo')
+        Página principal
+    @endsection
 
 ## Helpers
 
-Los helpers son funciones que se pueden usar dentro de los scripts de Laravel. Por ejemplo, `{{ now() }}`. 
+Los helpers son funciones que se pueden usar dentro de los scripts de Laravel. Para invocar a helpers hay que incluirlos entre `{{ }}`.
 
-El helper *asset* genera una URL usando el esquema actual de la petición (HTTP o HTTPS).
+Por ejemplo, `{{ now() }}`
 
-Para invocar a helpers hay que incluirlos entre `{{ }}`.
+Otro ejemplo lo tenemos en el helper [*asset*](https://laravel.com/docs/9.x/helpers#method-asset), que genera una URL usando el esquema actual de la petición (HTTP o HTTPS).
 
 Más información sobre helpers en https://laravel.com/docs/9.x/helpers
 
-## Estructura de carpetas de Laravel
-
-* **./app/Http/Controllers**: tus controladores.
-* **./app/Models**: tus modelos.
-* **./public**: imágenes, hojas de estilo y de Javascript una vez y son compilados. La parte pública que ve el usuario.
-* **./resources/css**: ahí están los CSS sin compilar.
-* **./resources/js**: ahí están los javascript sin compilar.
-* **./resources/views**: donde se alojan las vistas.
-* **./routes**: donde están las rutas. 
-* **./storage**: donde los usuarios suben sus ficheros.
-* **./vendor**: donde se colocan las dependencias de comnposer.
-* **./env**: variables de entorno.
-
 ## Routing en Laravel
 
-Laravel routing es un mecanismo usado para enrutar todas las peticiones a tu aplicación a métodos específicos o funciones que tratarán convenientemente dichas peticiones. Las rutas de Laravel aceptan una URI y un *closure*. Las closures son una versión de PHP de lo que sería una función anónima. Una closure es una función que puedes pasar como un objeto, asignar a una variable, o pasar como un parámetro a otra función o método.
+Laravel routing es un mecanismo usado para enrutar todas las peticiones que llegan a nuestrea aplicación a métodos o funciones específicas que las tratarán convenientemente. Las rutas de Laravel aceptan una URI y un *closure*. Los closures son una versión de PHP de lo que sería una función anónima. Un closure es una función que puedes pasar como un objeto, asignar a una variable, o pasar como un parámetro a otra función o método.
 
 Las rutas Laravel se definen en los *route files* localizados en la carpeta *routes*.
 
 * El fichero *routes/web.php* define rotas a tu interfaz web.
 * El fichero *routes/api.php* define rutas a tu API (si dispones de una). Se utilizan en arquitecturas orientadas a servicio o REST APIs.
+
+El contenido por defecto de *routes/web.php* es el siguiente:
+
+    Route::get('/', function () {
+        return view('welcome');
+    });
+
+Lo cual indica que cuando se acceda a la URL de nuestra aplicación, se mostrará la vista *resources/views/welcome.blade.php*. (*view()* es un helper que devuelve una instancia de una vista.)
 
 A continuación se muestras dos formas de definir rutas en Laravel:
 
@@ -162,10 +201,10 @@ A continuación se muestras dos formas de definir rutas en Laravel:
     });
     Route::get('/about', 'App\Http\Controllers\HomeController@about')->name("home.about");
 
-* La primera conecta la URI "/" con una closure que devuelve una vista (home.index). *view()* es un helper que cevuelve una instancia de una vista. Además, se le pasa la variable *viewData* a la vista *home.index* mediante el encadenamiento del método *with* en el helper método *view* (Revisar traducción).
-* La segunda ruta conecta la URL "/about" con el método *about* de la clase *HomeController*. Además, definimos un nombre perosnalizado de ruta mediante el encadenamiento del método *name* en la definición de la ruta.
+* La primera conecta la URI "/" con una closure que devuelve una vista (home.index). Además, se le pasa la variable *viewData* a la vista *home.index* mediante el encadenamiento del método *with* en el helper método *view* (Revisar traducción).
+* La segunda ruta conecta la URL "/about" con el método *about* de la clase *HomeController*. Además, definimos un nombre personalizado de ruta mediante el encadenamiento del método *name* en la definición de la ruta.
 
-<!-->
+<!--
 En los routes (por ejemplo, ./routes/web.php) se indica mediante las llamadas a los métodos "get": "si yo visito la URL especificada, ejecuta esa función". 
 
 Aquí tenemos un ejemplo que encontramos en ./routes/web.php
@@ -179,28 +218,7 @@ Aquí tenemos un ejemplo que encontramos en ./routes/web.php
 
 -->
 
-## Directiva *extends*
-
-Se utiliza en las vistas para cargar otras vistas. Por ejemplo, para cargar el menú principal que aparece en todas nuestras páginas.
-
-    @extends('layout.app')
-
-Esa línea cargaría el contenido de './views/layout/app.blade.php'.
-
-## Directiva *yield*
-
-Sirve para declarar una especie de marcador/contenedor en una vista para posteriormente inyectarle contenido desde las vistas ¿padre? utilizando la directiva @section. Utiliza dos parámetros. El primero es el identificador del marcador y el segundo es un valor por defecto que se inyectará en caso de que la vista no incuya código para dicho marcador.
-
-En la vista incluiríamos:
-
-    <h1>@yield('titulo')</h1>
-
-Y en la vista principal incluiríamos:
-
-    @section('titulo')
-        Página principal
-    @endsection
-
+<!--
 ## Instalación de *Tailwind CSS* con *Vite*
 
 *Tailwind CSS es un framework de CSS de código abierto2​ para el diseño de páginas web. La principal característica de esta biblioteca es que, a diferencia de otras como Bootstrap, no genera una serie de clases predefinidas para elementos como botones o tablas. En su lugar, crea una lista de clases CSS "de utilidad" que se pueden usar para dar estilos individuales a cada elemento.* - Fuente: Wikipedia
@@ -246,8 +264,10 @@ Incluir la directiva `@vite ('resources/css/app.css')` en el `<head>` de nuestra
     </h1>
     </body>
     </html>
+-->
 
-## Controladore
+<!--
+## Controladores
 
 Podemos crear un controlador con:
 
@@ -271,7 +291,9 @@ Los controladores nos ayudan a tener el código mejor organizado y separar la fu
 Laravel tiene una convención al nombrar los métodos de los controladores:
 
 ![convenciones](img/convencionesControladores.png)
+-->
 
+<!--
 ## Tipos de request
 
 Get es el más simple. Cuando visitas un sitio web por defecto es un get. Se usa para recuperar datos pero no para enviar datos.
@@ -283,14 +305,13 @@ Put se usa para actualizar un elemento. Si no existe, crea uno nuevo. Reemplaza 
 Patch actualiza parcialmente un recurso.
 
 Delete elimina un recurso.
+-->
 
 ## Extensiones para Visual Studio Code
 
-Para trabajar con Tailwind es conveniente utilizar las extensiones de Visual Studio Code "CSS peek" y "Tailwind CSS intelligence".
+<!-- Para trabajar con Tailwind es conveniente utilizar las extensiones de Visual Studio Code "CSS peek" y "Tailwind CSS intelligence". -->
 
-Además, también se recomienda "Laravel Blade Snippets", "Laravel Snippets", "Laravel goto view" y "Laravel Extra Intellisense". Para PHP, "PHP Intellisense", "PHP Intelephense" y "PHP Namespace Resolver"
+Se recomienda instalar "Laravel Blade Snippets", "Laravel Snippets", "Laravel goto view" y "Laravel Extra Intellisense". Para PHP, "PHP Intellisense", "PHP Intelephense" y "PHP Namespace Resolver"
 
 ## Varios
 * `{{  }}`: Lo podemos encontrar en ficheros Blade. Procesa lo que está en el interior como código PHP, para mostrar el resultado. Es como hacer un echo. Por ejemplo, `{{1+1}} `mostraría 2. También se utilizan para invocar helpers. Y para mostrar información pasada a la vista.
-* **XXXXX:** 
-* 
