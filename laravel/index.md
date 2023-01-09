@@ -167,9 +167,11 @@ Y en la vista principal incluiríamos:
 
 ## Helpers
 
-Los helpers son funciones que se pueden usar dentro de los scripts de Laravel. Para invocar a helpers hay que incluirlos entre "{{ }}".
+Los helpers son funciones que se pueden usar dentro de los scripts de Laravel. Para invocar a helpers hay que incluirlos entre {{ y }}.
 
-Por ejemplo, "{{ now() }}"
+Por ejemplo, 
+
+    {{ now() }}
 
 Otro ejemplo lo tenemos en el helper [*asset*](https://laravel.com/docs/9.x/helpers#method-asset), que genera una URL usando el esquema actual de la petición (HTTP o HTTPS).
 
