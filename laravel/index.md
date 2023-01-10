@@ -153,7 +153,7 @@ Esa línea cargaría el contenido de './views/layout/app.blade.php'. Ojo, que en
 
 ## Directiva *yield*
 
-Sirve para declarar una especie de marcador/contenedor en una vista para posteriormente inyectarle contenido desde las vistas padre utilizando para ello la directiva @section. Requiere dos parámetros. El primero es el identificador del marcador y el segundo (opcional) es un valor por defecto que se inyectará en caso de que la vista no incuya código para dicho marcador.
+Sirve para declarar una *especie* de marcador/contenedor en una vista para posteriormente inyectarle contenido desde las vistas padre utilizando para ello la directiva @section. Requiere dos parámetros. El primero es el identificador del marcador y el segundo (opcional) es un valor por defecto que se inyectará en caso de que la vista no incuya código para dicho marcador.
 
 En la vista hija incluiríamos:
 
@@ -198,13 +198,17 @@ A continuación se muestran otras dos formas de definir rutas en Laravel:
 
     Route::get('/', function () {
         $viewData = [];
-        $viewData["title"] = "Home Page - Online Store";
+        $viewData["title"] = "Página principal - Tienda online";
         return view('home.index')->with("viewData", $viewData);
     });
+<!--
     Route::get('/about', 'App\Http\Controllers\HomeController@about')->name("home.about");
+-->
+
+    Route::get('/about', 'App\Http\Controllers\HomeController@about');
 
 * La primera conecta la URI "/" con una closure que devuelve una vista (home.index). Además, se le pasa la variable *viewData* a la vista *home.index* mediante el encadenamiento del método *with* en el helper método *view* (Revisar traducción).
-* La segunda ruta conecta la URL "/about" con el método *about* de la clase *HomeController*. Además, definimos un nombre personalizado de ruta mediante el encadenamiento del método *name* en la definición de la ruta.
+* La segunda ruta conecta la URL "/about" con el método *about* de la clase *HomeController*, alojado en la carpeta /App/Http/Controllers". <!--Además, definimos un nombre personalizado de ruta mediante el encadenamiento del método *name* en la definición de la ruta.-->
 
 <!--
 En los routes (por ejemplo, ./routes/web.php) se indica mediante las llamadas a los métodos "get": "si yo visito la URL especificada, ejecuta esa función". 
@@ -268,18 +272,17 @@ Incluir la directiva `@vite ('resources/css/app.css')` en el `<head>` de nuestra
     </html>
 -->
 
-<!--
 ## Controladores
 
 Podemos crear un controlador con:
 
-    sail artisan make:controller <nombre>
+    php artisan make:controller <nombredelcontrolador>
 
-Esto creará un controlador en la carpeta "/Http/Controllers". Dicho controlador consistirá en una clase con una serie de métodos que tendremos que definir nosotros. Dichos métodos se invocarán desde el route correspondiente. En dichos métodos se cargarán las vistas y se invocarán a los modelos correspondientes. A continuación se muestra un ejemplo de un route:
+Esto creará un controlador en la carpeta "/Http/Controllers". Dicho controlador consistirá en una clase con una serie de métodos que tendremos que definir nosotros. Dichos métodos se invocarán desde el router. En dichos métodos se cargarán las vistas y se invocarán a los modelos correspondientes. A continuación se muestra un ejemplo de un route:
 
     Route::get('/crear-cuenta', [RegisterController::class, 'index']);
 
-y de un controlador:
+y de su asociado:
 
     class RegisterController extends Controller
     {
@@ -289,12 +292,11 @@ y de un controlador:
     }
 
 Los controladores nos ayudan a tener el código mejor organizado y separar la funcionalidad de las aplicaciones.
-
+<!-->
 Laravel tiene una convención al nombrar los métodos de los controladores:
 
 ![convenciones](img/convencionesControladores.png)
 -->
-
 <!--
 ## Tipos de request
 
