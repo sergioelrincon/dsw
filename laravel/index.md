@@ -194,7 +194,7 @@ El contenido por defecto de *routes/web.php* es el siguiente:
 
 Lo cual indica que cuando se acceda a la URL de nuestra aplicación, se mostrará la vista *resources/views/welcome.blade.php*. (*view()* es un helper que devuelve una instancia de una vista.)
 
-A continuación se muestran otras dos formas de definir rutas en Laravel:
+A continuación se muestran otras formas de definir rutas en Laravel:
 
     Route::get('/', function () {
         $viewData = [];
