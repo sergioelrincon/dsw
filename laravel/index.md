@@ -165,6 +165,16 @@ Y en la vista principal incluiríamos:
         Página principal
     @endsection
 
+## Directiva *route*
+
+Devuelve la ruta a la que hace referencia el primer parámetro. Previamente debe estar definido el nombre de la ruta.
+
+    <a href="{{ route('product.show' }}">...</a>
+
+Si la ruta tiene un parámetro, la forma correcta de pasárselo es la siguiente:
+
+    <a href="{{ route('product.show', ['id'=> $product["id"]]) }}">
+
 ## Helpers
 
 Los helpers son funciones que se pueden usar dentro de los scripts de Laravel. Para invocar a helpers hay que incluirlos entre {{ y }}.
