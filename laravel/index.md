@@ -213,7 +213,17 @@ A continuación se muestran otras formas de definir rutas en Laravel:
     Route::get('/about', 'App\Http\Controllers\HomeController@about')->name("home.about");
 
 * La primera conecta la URI "/" con una closure que devuelve una vista (home.index). Además, se le pasa la variable *viewData* a la vista *home.index* mediante el encadenamiento del método *with* en el helper método *view* (Revisar traducción).
-* La segunda ruta conecta la URL "/about" con el método *about* de la clase *HomeController*, alojado en la carpeta /App/Http/Controllers". Además, definimos un nombre personalizado de ruta mediante el encadenamiento del método *name* en la definición de la ruta. ¿Qué utilidad crees que tiene darle un nombre personalizado a la ruta?
+* La última ruta conecta la URL "/about" con el método *about* de la clase *HomeController*, alojado en la carpeta /App/Http/Controllers". Además, definimos un nombre personalizado de ruta mediante el encadenamiento del método *name* en la definición de la ruta. ¿Qué utilidad crees que tiene darle un nombre personalizado a la ruta?
+
+Las rutas también pueden incluir parámetros:
+
+    Route::get('/cliente/{id}', 'App\Http\Controllers\CustomerController@show');
+
+Esta ruta será la encargada de gestionar peticiones del tipo "/cliente/1", por ejemplo. En este caso, al método "ver" de "CustomerController" se le enviará por parámetro el campo "$id". Su declaración deberá realizarse de la siguiente forma:
+
+    ...
+    public function show($id) {
+    ...
 
 <!--
 En los routes (por ejemplo, ./routes/web.php) se indica mediante las llamadas a los métodos "get": "si yo visito la URL especificada, ejecuta esa función". 
