@@ -317,7 +317,89 @@ y de su asociado:
     }
 
 Los controladores nos ayudan a tener el código mejor organizado y separar la funcionalidad de las aplicaciones.
-<!-->
+
+## Bases de datos en Laravel
+
+Laravel soporta 4 sistemas gestores de base de datos: MySQL, PostgreSQL, SQLite y SQL Server.
+
+### Migraciones
+
+Las migraciones de Laravel nos proporcionan una especie de "control de versiones" para nuestra base de datos. A través de ellas podremos crear y modificar las diferentes tablas que la conforman.
+
+Para crear una migración en Laravel tenemos que ejecutar:
+
+    php artisan make:migration create_table_horarios
+
+El comando anterior creará una migración de la tabla de horarios en la carpeta "database/migrations". Cada migración tiene asociada un timestamp que permite determinar su orden. 
+
+El fichero generado contendrá una clase con dos métodos: "up" y "down". El método "up" se usará para añadir nuevas tablas, columnas o índices a nuestra base de datos. El comando "down" hace lo contrario. 
+
+El método "up" que se genera tiene, por defecto, el siguiente código:
+
+    Schema::create('products', function (Blueprint $table) {
+        $table->id();
+        $table->timestamps();
+    });
+
+Nosotros deberíamos editar dicho método, mantener los campos actuales y añadir las columnas correctas junto a su tipo siguiendo el formato:
+
+    $table-><tipo>("<nombredelcampo>");
+
+Por ejemplo:
+
+    $table->string("username");
+
+El método "timestamps" creará las columnas "created_at" y "updated_at".
+
+Podemos conocer todos los tipos de campos en [https://laravel.com/docs/9.x/migrations#available-column-types](https://laravel.com/docs/9.x/migrations#available-column-types)
+
+### Configuración de la BD a través del fichero .env
+
+Para ejecutar las migraciones tenemos que modificar el fichero .env alojado en la carpeta principal del proyecto. En él debemos especificar el nombre de la BD, el usuario y la contraseña.
+
+Para ejecutar las migraciones debemos lanzar el siguiente comando:
+
+    php artisan migrate
+
+## Modelos
+
+En Laravel la interacción con la base de datos se lleva a cabo a través de un *object-relational mapper* denominado **Eloquent**. Cuando usamos Eloquent, cada tabla de nuestra base de datos tiene un modelo correspondiente que se utiliza para interactuar con la tabla. Eloquent nos permitirá también insertar, actualizar y borrar registros.
+
+Los modelos en Laravel están alojados en "app/Http/Models". 
+
+Para crear un modelo tenemos que ejecutar:
+
+    php artisan make:model Product
+    
+Consideraciones importantes respecto al modelo:
+
+* Eloquent asume que cada modelo está asociado a una tabla que tiene una clave primaria denominada "id". Por lo tanto, en todas nuestras migraciones usaremos el método "id" que crea dicho campo.
+* Eloquent asume que el modelo "Cliente" guarda sus registros en una table denominada "Clientes". Esto se aplica a todos los modelos.
+* Por defecto, Eloquent espera que estén creados los campos "created_at" y "updated_at". Por lo tanto, en todas nuestras migraciones utilizaremos el método "timestamps()" visto anteriormente.
+
+Eloquent proporciona a nuestros modelos los siguientes métodos:
+
+* Product::all(): devuelve todos los productos.
+* Product::find(1): devuelve el producto con id=1.
+* Product::findOrFail(1): igual que el anterior pero devuelve una excepción si no encuentra el registro.
+* Product::create(['name' => 'TV', ...]): crea un nuevo registro en la base de datos.
+* Product::destroy(1): elimina el registro con id=1.
+
+El siguiente ejemplo muestra cómo podemos acceder al restultado de uno de los métodos antriores:
+
+    $product = Product::findOrFail(1);  
+    echo $product->name; # prints the product’s name  
+    echo $product["name"]; # prints the product’s name
+
+
+Eloquent almacena los atributos del modelo en un atributo de la clase (un array) denominado `$attributes`. 
+
+Para utilizar un modelo determinado en nuestros controladores deberemos insertar la siguiente línea de código al comienzo del fichero correspondiente:
+
+    use App\Models\Product;
+
+
+<!--
 Laravel tiene una convención al nombrar los métodos de los controladores:
 
 ![convenciones](img/convencionesControladores.png)
