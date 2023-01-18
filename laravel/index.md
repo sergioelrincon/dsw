@@ -328,7 +328,7 @@ Las migraciones de Laravel nos proporcionan una especie de "control de versiones
 
 Para crear una migración en Laravel tenemos que ejecutar:
 
-    php artisan make:migration create_table_horarios
+    php artisan make:migration create_products_table
 
 El comando anterior creará una migración de la tabla de horarios en la carpeta "database/migrations". Cada migración tiene asociada un timestamp que permite determinar su orden. 
 
