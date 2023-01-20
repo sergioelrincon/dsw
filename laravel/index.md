@@ -235,6 +235,26 @@ Esta ruta será la encargada de gestionar peticiones del tipo "/cliente/1", por 
     public function show($id) {
     ...
 
+### Rutas POST
+
+Las rutas que utilizan el método POST nos permiten recibir y almacenar información enviada a través de un formulario. Su formato sería el siguiente:
+
+    Route::post('/test/store', 'App\Http\Controllers\TestController@store')->name("test.store");
+
+En este caso, el método "store" deberá definirse con un parámetro: `function store (Request $request)`. Dicho parámetro es un objeto que nos permitirá interactuar con la petición HTTP realizada por nuestra aplicación para acceder a las cookies, campos, ficheros, etc.
+
+En el método "store" podremos establecer las reglas de validación de los campos recibidos. Podemos consultar información sobre las reglas de validación disponibles en [https://laravel.com/docs/9.x/validation#available-validation-rules](https://laravel.com/docs/9.x/validation#available-validation-rules). A continuación mostramos un ejemplo de validación:
+
+    $request->validate([  "name" => "required|max:255" ]);
+
+Si la validación es exitosa el código se ejecutará correctamente. En caso contrario se generará un error que se podrá consultar a través del objeto global "$error". Si invocamos a "$error->all()" podremos mostrar al usuario dichos errores.
+
+Para crear nuevos registros a través del modelo deberemos crear un objeto de la clase del modelo correspondiente y asignarle valor a sus atributos. El valor que le debemos asignar lo obtenemos del objeto $request pasado por parámetro. Finalmente tendremos que invocar al método "save()" de dicho objeto para guardar los datos. Mostramos un ejemplo a continuación:
+
+    $newCar= new Car();  
+    $newCar->setBrand($request->input('brand'));  
+    $newCar->save();
+
 <!--
 En los routes (por ejemplo, ./routes/web.php) se indica mediante las llamadas a los métodos "get": "si yo visito la URL especificada, ejecuta esa función". 
 
@@ -390,6 +410,8 @@ El siguiente ejemplo muestra cómo podemos acceder al restultado de uno de los m
     $product = Product::findOrFail(1);  
     echo $product->name; # prints the product’s name  
     echo $product["name"]; # prints the product’s name
+
+
 
 
 Eloquent almacena los atributos del modelo en un atributo de la clase (un array) denominado `$attributes`. 
