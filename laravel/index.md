@@ -7,6 +7,8 @@
   - [Artisan](#artisan)
   - [Estructura de carpetas de Laravel](#estructura-de-carpetas-de-laravel)
   - [Blade](#blade)
+  - [Directiva *if*](#directiva-if)
+  - [Directiva *foreach*](#directiva-foreach)
   - [Directiva *extends*](#directiva-extends)
   - [Directiva *yield*](#directiva-yield)
   - [Directiva *route*](#directiva-route)
@@ -279,7 +281,7 @@ En el método "store" podremos establecer las reglas de validación de los campo
 
     $request->validate([  "name" => "required|max:255" ]);
 
-Si la validación es exitosa el código se ejecutará correctamente. En caso contrario se generará un error que se podrá consultar a través del objeto global "$errors". Si invocamos a "$errors->all()" podremos mostrar al usuario dichos errores.
+Si la validación es exitosa el código se ejecutará correctamente. En caso contrario se generarán errores que se podrán consultar a través del objeto global "$errors". Si invocamos a "$errors->all()" podremos mostrar al usuario dichos errores.
 
 Para crear nuevos registros a través del modelo deberemos crear un objeto de la clase del modelo correspondiente y asignarle valor a sus atributos. El valor que le debemos asignar lo obtenemos del objeto $request pasado por parámetro. Finalmente tendremos que invocar al método "save()" de dicho objeto para guardar los datos. Mostramos un ejemplo a continuación:
 
