@@ -143,6 +143,12 @@ en lugar de:
 
 Mediante el uso de un motor de plantillas evitamos utilizar sintaxis PHP o etiquetas PHP en nuestros ficheros de vistas. En su lugar deberíamos usar directivas o helpers. La ventaja es que los motores de plantillas limitan el número de funcionalidades disponibles en las vistas y de esta forma se aseguran de que no hacemos *locuras* en las vistas. Es recomendable que si no encontramos una directiva o helper para una funcionalidad que necesitemos implementar en una vista es, posiblemente, porque dicha funcinalidad no debería estar implementada en la vista. Quizás debería estarlo en un controlador o en otro fichero.
 
+## Directiva *if*
+
+
+## Directiva *foreach*
+
+
 ## Directiva *extends*
 
 Se utiliza en las vistas para cargar otras vistas. Por ejemplo, para cargar el menú principal que se podría incluir en el encabezado de todas nuestras páginas.
@@ -247,7 +253,7 @@ En el método "store" podremos establecer las reglas de validación de los campo
 
     $request->validate([  "name" => "required|max:255" ]);
 
-Si la validación es exitosa el código se ejecutará correctamente. En caso contrario se generará un error que se podrá consultar a través del objeto global "$error". Si invocamos a "$error->all()" podremos mostrar al usuario dichos errores.
+Si la validación es exitosa el código se ejecutará correctamente. En caso contrario se generará un error que se podrá consultar a través del objeto global "$errors". Si invocamos a "$errors->all()" podremos mostrar al usuario dichos errores.
 
 Para crear nuevos registros a través del modelo deberemos crear un objeto de la clase del modelo correspondiente y asignarle valor a sus atributos. El valor que le debemos asignar lo obtenemos del objeto $request pasado por parámetro. Finalmente tendremos que invocar al método "save()" de dicho objeto para guardar los datos. Mostramos un ejemplo a continuación:
 
