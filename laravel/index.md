@@ -255,6 +255,23 @@ Para crear nuevos registros a través del modelo deberemos crear un objeto de la
     $newCar->setBrand($request->input('brand'));  
     $newCar->save();
 
+Más información sobre el método *input* en [https://laravel.com/docs/9.x/requests#retrieving-input](https://laravel.com/docs/9.x/requests#retrieving-input)
+
+### Rutas DELETE
+
+Utilizan el método DELETE de HTTP. Se suelen utilizar para eliminar elementos del modelo. A continuación mostramos un ejemplo:
+
+    Route::delete('/admin/products/{id}/delete', 'App\Http\Controllers\Admin\AdminProductController@delete')->name("admin.product.delete");
+
+En este caso, el action del formulario que necesite realizar la eliminación debería contener el parámetro "id" correspondiente, de la siguiente forma:
+
+    <form action="{{ route('admin.product.delete', $product->getId())}}" method="POST">
+        @method('DELETE')
+        <button>
+            Eliminar
+        </button>
+    </form>
+
 <!--
 En los routes (por ejemplo, ./routes/web.php) se indica mediante las llamadas a los métodos "get": "si yo visito la URL especificada, ejecuta esa función". 
 
@@ -411,14 +428,43 @@ El siguiente ejemplo muestra cómo podemos acceder al restultado de uno de los m
     echo $product->name; # prints the product’s name  
     echo $product["name"]; # prints the product’s name
 
-
-
-
 Eloquent almacena los atributos del modelo en un atributo de la clase (un array) denominado `$attributes`. 
 
 Para utilizar un modelo determinado en nuestros controladores deberemos insertar la siguiente línea de código al comienzo del fichero correspondiente:
 
     use App\Models\Product;
+
+## La clase *Storage*
+
+Laravel proporciona una capa de abstracción del sistema de ficheros que permite trabajar de forma muy sencilla con sistemas de ficheros locales, SFTP y Amazon S3.
+
+Esto lo consigue mediante el uso de una clase denominada *Storage*. Esta clase contiene una serie de métodos que permiten la creación, borrado y movimiento de ficheros y directorios. También permite la definición del tipo de almacenamiento que vamos a utilizar (por ejemplo, sistema de ficheros local).
+
+Para utilizar esta clase en nuestro fichero de código, deberemos incluir esta línea al comienzo del mismo:
+
+    use Illuminate\Support\Facades\Storage;
+
+Si queremos almacenar un fichero en disco que hemos recibido a través de un formulario lo podemos hacer mediante el método *put*:
+
+    Storage::disk('public')->put(  
+        $imageName,  
+        file_get_contents($request->file('nombredelcampo')->getRealPath())  
+    );
+
+* "public" hace referencia a una carpeta destinada a alojar ficheros que sean accesibles para el usuario: "storage/app/public", por defecto. 
+  
+  Para que esa carpeta sea accesible a través de la web tenemos que ejecutar desde línea de comandos `php artisan storage:link`. Este comando crea un enlace simbólico desde "public/storage" hacia "storage/app/public". 
+
+  Esto es necesario porque cuando ejecutamos nuestra aplicación, los usuarios solo pueden acceder a los ficheros alojados en la carpeta "public/". El resto de carpetas no son accesibles.
+
+* [$request->file('nombredelcampo')](https://laravel.com/docs/9.x/requests#files): obtiene una instancia del fichero subido en un formulario.
+* [$request->file('nombredelcampo')->getRealPath())](https://www.php.net/manual/en/splfileinfo.getrealpath.php): devuelve la ruta del fichero. 
+
+Relacionado con la clase *Storage* y con la subida de ficheros a través de formularios también tenemos el siguiente método:
+
+* [$request->file('nombredelcampo')->extension()](https://laravel.com/docs/9.x/requests#file-paths-extensions): devuelve la extensión del fichero enviado a través del formulario.
+
+* [$request->hasFile('nombredelcampo')](https://laravel.com/docs/9.x/requests#retrieving-uploaded-files): Comprueba si nos ha llegado a través del envío de un formulario un fichero en un campo determinado.
 
 
 <!--
