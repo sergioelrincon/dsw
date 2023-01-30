@@ -300,7 +300,7 @@ Las rutas que usan el método DELETE de HTTP las utilizaremos para eliminar elem
 
 En este caso, la ruta tiene un parámetro ($id) que se corresponde con el identificador del registro que vamos a eliminar. Para que le llegue este parámetro a la ruta, el atributo "action" del formulario que enviará los datos debería incluir dicho parámetro. La sintaxis correcta sería la siguiente:
 
-    <form action="{{ route('admin.product.delete', $product->getId())}}" method="POST">
+    <form action="\{\{ route('admin.product.delete', $product->getId())\}\}" method="POST">
         @method('DELETE')
         <button>
             Eliminar
@@ -319,7 +319,7 @@ En este caso el método "update" será el encargado de realizar la modificación
 
 Al igual que en el caso anterior, el formulario debe incluir la directiva [`@method`](https://laravel.com/docs/9.x/blade#method-field) para indicar que se va a utilizar el método PUT.
 
-    <form action="{{ route('admin.product.update', ['id'=> $viewData['product']->getId()]) }}" method="POST">
+    <form action="\{\{ route('admin.product.update', ['id'=> $viewData['product']->getId()]) \}\}" method="POST">
         @method('PUT')
         ...
     </form>
