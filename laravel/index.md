@@ -16,6 +16,7 @@
   - [Routing en Laravel](#routing-en-laravel)
     - [Rutas POST](#rutas-post)
     - [Rutas DELETE](#rutas-delete)
+    - [Rutas PUT](#rutas-put)
   - [Controladores](#controladores)
   - [Bases de datos en Laravel](#bases-de-datos-en-laravel)
     - [Migraciones](#migraciones)
@@ -281,7 +282,7 @@ En el método "store" podremos establecer las reglas de validación de los campo
 
     $request->validate([  "name" => "required|max:255" ]);
 
-Si la validación es exitosa el código se ejecutará correctamente. En caso contrario se generarán errores que se podrán consultar a través del objeto global "$errors". Si invocamos a "$errors->all()" podremos mostrar al usuario dichos errores.
+Si la validación es exitosa el código se ejecutará correctamente. En caso contrario se generarán errores que se podrán consultar a través del objeto global "$errors". Si invocamos a ` $errors->all() ` podremos mostrar al usuario dichos errores.
 
 Para crear nuevos registros a través del modelo deberemos crear un objeto de la clase del modelo correspondiente y asignarle valor a sus atributos. El valor que le debemos asignar lo obtenemos del objeto $request pasado por parámetro. Finalmente tendremos que invocar al método "save()" de dicho objeto para guardar los datos. Mostramos un ejemplo a continuación:
 
@@ -293,11 +294,11 @@ Más información sobre el método *input* en [https://laravel.com/docs/9.x/requ
 
 ### Rutas DELETE
 
-Utilizan el método DELETE de HTTP. Las vamos a utilizar para eliminar elementos del modelo. A continuación mostramos un ejemplo:
+Las rutas que usan el método DELETE de HTTP las utilizaremos para eliminar elementos de nuestro modelo. A continuación mostramos un ejemplo:
 
     Route::delete('/admin/products/{id}/delete', 'App\Http\Controllers\Admin\AdminProductController@delete')->name("admin.product.delete");
 
-En este caso, el action del formulario que necesite realizar la eliminación debería contener el parámetro "id" correspondiente, de la siguiente forma:
+En este caso, la ruta tiene un parámetro ($id) que se corresponde con el identificador del registro que vamos a eliminar. Para que le llegue este parámetro a la ruta, el atributo "action" del formulario que enviará los datos debería incluir dicho parámetro. La sintaxis correcta sería la siguiente:
 
     <form action="{{ route('admin.product.delete', $product->getId())}}" method="POST">
         @method('DELETE')
@@ -305,6 +306,24 @@ En este caso, el action del formulario que necesite realizar la eliminación deb
             Eliminar
         </button>
     </form>
+
+Hay que prestar atención al uso de la directiva [`@method`](https://laravel.com/docs/9.x/blade#method-field). Es necesario incluirla para indicar que la ruta utiliza el método DELETE.
+
+### Rutas PUT
+
+Las rutas PUT las utilizaremos para realizar modificaciones en nuestro modelo. A continuación incluimos un ejemplo de una ruta de este tipo.
+
+    Route::put('/admin/products/{id}/update', 'App\Http\Controllers\Admin\AdminProductController@update')->name("admin.product.update");
+
+En este caso el método "update" será el encargado de realizar la modificación correspondiente en el modelo. 
+
+Al igual que en el caso anterior, el formulario debe incluir la directiva [`@method`](https://laravel.com/docs/9.x/blade#method-field) para indicar que se va a utilizar el método PUT.
+
+    <form action="{{ route('admin.product.update', ['id'=> $viewData['product']->getId()]) }}" method="POST">
+        @method('PUT')
+        ...
+    </form>
+
 
 <!--
 En los routes (por ejemplo, ./routes/web.php) se indica mediante las llamadas a los métodos "get": "si yo visito la URL especificada, ejecuta esa función". 
@@ -503,6 +522,8 @@ Relacionado con la clase *Storage* y con la subida de ficheros a través de form
 
 * [$request->hasFile('nombredelcampo')](https://laravel.com/docs/9.x/requests#retrieving-uploaded-files): Comprueba si nos ha llegado a través del envío de un formulario un fichero en un campo determinado.
 
+**NOTA:** Recuerda que cuando enviamos un fichero a través de un formulario, debemos incluir el atributo [`enctype=multipart/form-data`](https://www.php.net/manual/es/features.file-upload.post-method.php) en la declaración de dicho formulario.
+
 
 <!--
 Laravel tiene una convención al nombrar los métodos de los controladores:
@@ -530,4 +551,4 @@ Delete elimina un recurso.
 Se recomienda instalar "Laravel Blade Snippets", "Laravel Snippets", "Laravel goto view" y "Laravel Extra Intellisense". Para PHP, "PHP Intellisense", "PHP Intelephense" y "PHP Namespace Resolver"
 
 ## Varios
-* `{{  }}`: Lo podemos encontrar en ficheros Blade. Procesa lo que está en el interior como código PHP, para mostrar el resultado. Es como hacer un echo. Por ejemplo, `{{1+1}} `mostraría 2. También se utilizan para invocar helpers. Y para mostrar información pasada a la vista.
+* `\{\{  \}\}`: Lo podemos encontrar en ficheros Blade. Procesa lo que está en el interior como código PHP, para mostrar el resultado. Es como hacer un echo. Por ejemplo, `{{1+1}} `mostraría 2. También se utilizan para invocar helpers. Y para mostrar información pasada a la vista.
