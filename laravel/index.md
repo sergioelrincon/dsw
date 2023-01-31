@@ -12,6 +12,7 @@
   - [Directiva *extends*](#directiva-extends)
   - [Directiva *yield*](#directiva-yield)
   - [Directiva *route*](#directiva-route)
+  - [Directivas de autenticación](#directivas-de-autenticación)
   - [Helpers](#helpers)
   - [Routing en Laravel](#routing-en-laravel)
     - [Rutas POST](#rutas-post)
@@ -23,6 +24,8 @@
     - [Configuración de la BD a través del fichero .env](#configuración-de-la-bd-a-través-del-fichero-env)
   - [Modelos](#modelos)
   - [La clase *Storage*](#la-clase-storage)
+  - [Validación](#validación)
+    - [Laravel Middleware](#laravel-middleware)
   - [Extensiones para Visual Studio Code](#extensiones-para-visual-studio-code)
   - [Varios](#varios)
 
@@ -209,6 +212,19 @@ Devuelve la ruta a la que hace referencia el primer parámetro. Previamente debe
 Si la ruta tiene un parámetro, la forma correcta de pasárselo es la siguiente:
 
     <a href="{{ route('product.show', ['id'=> $product["id"]]) }}">
+
+
+## Directivas de autenticación
+
+Permiten mostrar código en las vistas en función de si el usuario está o no autenticado. 
+
+    @auth
+        // The user is authenticated...
+    @endauth
+    
+    @guest
+        // The user is not authenticated...
+    @endguest
 
 ## Helpers
 
@@ -523,6 +539,56 @@ Relacionado con la clase *Storage* y con la subida de ficheros a través de form
 * [$request->hasFile('nombredelcampo')](https://laravel.com/docs/9.x/requests#retrieving-uploaded-files): Comprueba si nos ha llegado a través del envío de un formulario un fichero en un campo determinado.
 
 **NOTA:** Recuerda que cuando enviamos un fichero a través de un formulario, debemos incluir el atributo [`enctype=multipart/form-data`](https://www.php.net/manual/es/features.file-upload.post-method.php) en la declaración de dicho formulario.
+
+## Validación
+
+Laravel dispone de varios [sistemas de autenticación](https://laravel.com/docs/9.x/starter-kits). Nosotros utilizaremos *laravel/ui*, ya que es el único que no requiere frameworks CSS o Javascript adicionales (Tailwind CSS, React, Vue, etc.).
+
+La instalación de *laravel/ui* se realiza a través del siguiente comando:
+
+    composer require laravel/ui
+
+También necesitamos generar la estructura de ficheros de Bootstrap necesarios para implementar las pantallas de inicio de sesión. Para ello tendremos que ejecutar el comando que se muestra a continuación, **teniendo en cuenta** que debemos responder que "no" cuando nos pregunte si queremos sobreescribir los ficheros "app.blade.php" y "HomeController.php".
+
+    php artisan ui bootstrap --auth
+
+La ejecución del comando anterior generará los siguientes cambios:
+
+* Se creará la carpeta "app/Http/Controllers/Auth".
+* Se creará la carpeta "resources/views/auth".
+* Se modificará el fichero "routes/web.php".
+
+Posteriormente tendremos que modificar lo siguiente:
+
+* Eliminar la siguiente línea del fichero "web.php", ya que nuestra aplicación no tiene la ruta "/home": ~~Route::get('/home', [App/Http/Controllers/HomeController::class, 'index'])->name('home');~~
+* Cambiar la constante "HOME" del fichero "app/Providers/RouteServiceProvider.php" para que apunte a nuestra ruta principal. Este valor lo utiliza Laravel para redirigir al usuario después de validarse.
+
+### Laravel Middleware
+
+Laravel Middleware nos permite establecer restricciones en nuestra aplicación para controlar el acceso a determinadas páginas. Por ejemplo, impidiendo acceder a un usuario básico acceder al panel de control de nuestra aplicación y redirigiéndolo a la página principal. 
+
+Para crear un nuevo middleware, tenemos que ejecutar lo siguiente:
+
+    php artisan make:middleware AdminAuthMiddleware
+
+El nuevo middleware se creará en "app/Http/Middleware/AdminAuthMiddleware.php" y mediante su método "handle" podremos establecer las restricciones que queramos. Por ejemplo:
+
+    if (Auth::user() && Auth::user()->getRole() == 'editor') {  
+        return $next($request);  
+    } else {  
+        return redirect()->route('error.user');  
+    }
+
+De esta forma, se permite al usuario acceder a la ruta solo si su rol es "editor" y en caso contrario se la redirije a una página de error.
+
+En nuestro fichero "web.php" debemos incluir el siguiente código para controlar el acceso a las rutas que deseemos. La forma de hacerlo es la siguiente:
+
+    Route::middleware('publicador')->group(function () {
+        Route::get('/publicar', 'App\Http\Controllers\Admin\AdminPubController@index')->name("admin.pub.index");
+        ...
+    });
+
+Además, también tendremos que registrar el middleware en "app/Http/Kernel.php", añadiendo la línea `'admin' => \App\Http\Middleware\AdminAuthMiddleware::class,` al array $routeMiddleware.
 
 
 <!--
