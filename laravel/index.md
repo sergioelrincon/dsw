@@ -562,6 +562,7 @@ Posteriormente tendremos que modificar lo siguiente:
 
 * Eliminar la siguiente línea del fichero "web.php", ya que nuestra aplicación no tiene la ruta "/home": ~~Route::get('/home', [App/Http/Controllers/HomeController::class, 'index'])->name('home');~~
 * Cambiar la constante "HOME" del fichero "app/Providers/RouteServiceProvider.php" para que apunte a nuestra ruta principal. Este valor lo utiliza Laravel para redirigir al usuario después de validarse.
+* Añadir la línea `Auth::routes();` al final del fichero web.php
 
 ### Laravel Middleware
 
