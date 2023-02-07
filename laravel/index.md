@@ -286,6 +286,8 @@ Esta ruta será la encargada de gestionar peticiones del tipo "/cliente/1", por 
     public function show($id) {
     ...
 
+A través del comando `php artisan route:list` puedo consultar todas las rutas creadas en nuestra aplicación.
+
 ### Rutas POST
 
 Las rutas que utilizan el método POST nos permiten recibir y almacenar información enviada a través de un formulario. Su formato sería el siguiente:
