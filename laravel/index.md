@@ -576,6 +576,8 @@ Para crear un nuevo middleware, tenemos que ejecutar lo siguiente:
 
 El nuevo middleware se creará en "app/Http/Middleware/AdminAuthMiddleware.php" y mediante su método "handle" podremos establecer las restricciones que queramos. Por ejemplo:
 
+    use Illuminate\Support\Facades\Auth;
+    ...
     if (Auth::user() && Auth::user()->getRole() == 'editor') {  
         return $next($request);  
     } else {  
