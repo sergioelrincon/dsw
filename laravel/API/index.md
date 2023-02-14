@@ -106,7 +106,11 @@ Para implementar una APIRest en Laravel, debvemos tener en cuenta lo siguiente::
             'message' => 'Succeed'
         ], JsonResponse::HTTP_OK);
 
+Para que funcione el código anterior es necesario incluir las siguientes sentencias "use" en el controlador:
 
+    use App\Models\Post;
+    use Exception;
+    use Illuminate\Http\JsonResponse;
 
 ## Software recoomendado
 
