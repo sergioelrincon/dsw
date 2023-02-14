@@ -482,7 +482,7 @@ Para crear un modelo tenemos que ejecutar:
 Consideraciones importantes respecto al modelo:
 
 * Eloquent asume que cada modelo está asociado a una tabla que tiene una clave primaria denominada "id". Por lo tanto, en todas nuestras migraciones usaremos el método "id" que crea dicho campo.
-* Eloquent asume que el modelo "Cliente" guarda sus registros en una table denominada "Clientes". Esto se aplica a todos los modelos.
+* Eloquent asume que el modelo "Cliente" guarda sus registros en una table denominada "Clientes". Esto se aplica a todos los modelos. Más información sobre los nombres de las tablas en [el siguiente enlace](https://laravel.com/docs/8.x/eloquent#table-names).
 * Por defecto, Eloquent espera que estén creados los campos "created_at" y "updated_at". Por lo tanto, en todas nuestras migraciones utilizaremos el método "timestamps()" visto anteriormente.
 
 Eloquent proporciona a nuestros modelos los siguientes métodos:
